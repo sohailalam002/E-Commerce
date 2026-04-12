@@ -9,7 +9,6 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState('user');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -34,13 +33,8 @@ const Register = () => {
       return;
     }
 
-    if (!role) {
-      toast.error("Please select a role!");
-      return;
-    }
-    
     setIsSubmitting(true);
-    const result = await register({ name, email, password, role });
+    const result = await register({ name, email, password });
     setIsSubmitting(false);
     
     if (result.success) {
@@ -143,28 +137,6 @@ const Register = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
-            </div>
-          </div>
-
-          <div className="form-group mb-4">
-            <label htmlFor="role" className="font-weight-bold small text-secondary mb-0">Select Role</label>
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text bg-light border-right-0">
-                  <UserPlus size={18} className="text-muted" />
-                </span>
-              </div>
-              <select 
-                className="form-control bg-light border-left-0 pl-0" 
-                id="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                required
-              >
-                <option value="user">User 🛍️</option>
-                <option value="admin">Admin 👑</option>
-                <option value="superadmin">Super Admin 🛡️</option>
-              </select>
             </div>
           </div>
 
