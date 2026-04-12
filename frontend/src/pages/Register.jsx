@@ -72,7 +72,7 @@ const Register = () => {
                 type="text"
                 className="form-control bg-light border-left-0 pl-0"
                 id="name"
-                placeholder="John Doe"
+                placeholder="enter your full name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -92,7 +92,7 @@ const Register = () => {
                 type="email"
                 className="form-control bg-light border-left-0 pl-0"
                 id="email"
-                placeholder="you@example.com"
+                placeholder="enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -112,7 +112,7 @@ const Register = () => {
                 type="password"
                 className="form-control bg-light border-left-0 pl-0"
                 id="password"
-                placeholder="••••••••"
+                placeholder="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -132,7 +132,7 @@ const Register = () => {
                 type="password"
                 className="form-control bg-light border-left-0 pl-0"
                 id="confirmPassword"
-                placeholder="••••••••"
+                placeholder="confirm password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
