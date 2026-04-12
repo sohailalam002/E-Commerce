@@ -9,6 +9,7 @@ export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -28,7 +29,7 @@ export const ProductProvider = ({ children }) => {
   }, []);
 
   return (
-    <ProductContext.Provider value={{ products, categories, loading, setProducts }}>
+    <ProductContext.Provider value={{ products, categories, loading, setProducts, searchTerm, setSearchTerm }}>
       {children}
     </ProductContext.Provider>
   );

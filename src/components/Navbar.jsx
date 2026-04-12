@@ -6,7 +6,7 @@ import { useCart } from '../context/CartContext';
 import { useProducts } from '../context/ProductContext';
 
 const Navbar = () => {
-  const { categories } = useProducts();
+  const { categories, searchTerm, setSearchTerm } = useProducts();
   const { user, logout } = useAuth();
   const { cartCount } = useCart();
   const navigate = useNavigate();
@@ -37,9 +37,16 @@ const Navbar = () => {
           </Link>
 
           {/* SEARCH */}
-          <form className="form-inline mx-auto d-none d-md-flex w-50">
+          <form className="form-inline mx-auto d-none d-md-flex w-50" onSubmit={(e) => e.preventDefault()}>
             <div className="input-group w-100">
-              <input type="text" className="form-control rounded-pill border-0 shadow-sm px-4" placeholder="search" style={{ height: '38px', fontSize: '14px' }} />
+              <input 
+                type="text" 
+                className="form-control rounded-pill border-0 shadow-sm px-4" 
+                placeholder="search" 
+                style={{ height: '38px', fontSize: '14px' }} 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
           </form>
 

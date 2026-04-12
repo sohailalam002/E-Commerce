@@ -1,4 +1,4 @@
-﻿import React, { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useProducts } from '../context/ProductContext';
 import { Eye, ShoppingCart } from 'lucide-react';
@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import Testimonials from '../components/Testimonials';
 
 const Home = () => {
-  const { products, loading } = useProducts();
+  const { products, loading, searchTerm } = useProducts();
   const { addToCart } = useCart();
   const [searchParams] = useSearchParams();
   const categoryFilter = searchParams.get('category');
@@ -15,6 +15,14 @@ const Home = () => {
   const displayProducts = categoryFilter
     ? products.filter(p => p.category === categoryFilter)
     : products;
+
+  const filteredProducts = searchTerm 
+    ? displayProducts.filter(p => 
+        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (p.category && p.category.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (p.description && p.description.toLowerCase().includes(searchTerm.toLowerCase()))
+      )
+    : displayProducts;
 
   const handleAddToCart = (e, product) => {
     e.preventDefault();
@@ -46,8 +54,8 @@ const Home = () => {
       </div>
 
       <div className="row">
-        {displayProducts.length > 0 ? (
-          displayProducts.map(product => (
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map(product => (
             <div className="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex" key={product._id}>
               <div className="card w-100 shadow-sm border-0 border-bottom border-warning">
                 <img
@@ -77,7 +85,7 @@ const Home = () => {
           ))
         ) : (
           <div className="col-12 text-center text-muted py-5">
-            <h4>No products found in this category.</h4>
+            <h4>No products found</h4>
           </div>
         )}
       </div>
