@@ -1,20 +1,12 @@
 import path from 'path';
 import express from 'express';
 import multer from 'multer';
+import streamifier from 'streamifier';
+import cloudinary from '../config/cloudinary.js';
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename(req, file, cb) {
-    cb(
-      null,
-      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
-    );
-  },
-});
+const storage = multer.memoryStorage();
 
 function checkFileType(file, cb) {
   const filetypes = /jpg|jpeg|png|webp|gif/;
@@ -40,16 +32,13 @@ const upload = multer({
   },
 });
 
-// Wrapper to handle multer errors properly
 const uploadMiddleware = upload.single('image');
 
 router.post('/', (req, res) => {
   uploadMiddleware(req, res, (err) => {
     if (err instanceof multer.MulterError) {
-      // A Multer error occurred when uploading.
       return res.status(400).send({ message: err.message });
     } else if (err) {
-      // An unknown error occurred when uploading.
       return res.status(400).send({ message: err.message });
     }
 
@@ -57,11 +46,21 @@ router.post('/', (req, res) => {
       return res.status(400).send({ message: 'No file uploaded' });
     }
 
-    // Success
-    res.send({
-      message: 'Image uploaded successfully',
-      imageUrl: `/${req.file.path.replace(/\\/g, '/')}`,
-    });
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: 'shopsy_products' },
+      (error, result) => {
+        if (error) {
+          console.error('Cloudinary Upload Error:', error);
+          return res.status(500).send({ message: 'Cloudinary Upload Failed' });
+        }
+        res.send({
+          message: 'Image uploaded successfully',
+          imageUrl: result.secure_url,
+        });
+      }
+    );
+
+    streamifier.createReadStream(req.file.buffer).pipe(stream);
   });
 });
 
