@@ -36,11 +36,11 @@ const Home = () => {
     <div className="container mt-5 mb-5">
 
       {/* Hero Banner Area */}
-      <div className="jumbotron bg-light text-center rounded shadow-sm border p-4 p-md-5 mb-5">
-        <h1 className="font-weight-bold mb-3" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>Welcome to Shiwansh -Cart</h1>
-        <p className="lead mb-4" style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)' }}>Discover the best products at unbeatable prices.</p>
+      <div className="jumbotron bg-light text-center rounded shadow-sm border p-5 mb-5">
+        <h1 className="display-4 font-weight-bold mb-3">Welcome to Shiwansh -Cart</h1>
+        <p className="lead mb-4">Discover the best products at unbeatable prices.</p>
         {!categoryFilter && (
-          <Link to="/" className="btn btn-warning btn-lg rounded-pill px-4 px-md-5 w-100 w-md-auto shadow-sm font-weight-bold d-inline-block" style={{ maxWidth: '300px' }}>Shop Now</Link>
+          <Link to="/" className="btn btn-warning btn-lg rounded-pill px-5 shadow-sm font-weight-bold">Shop Now</Link>
         )}
       </div>
 
@@ -56,7 +56,7 @@ const Home = () => {
       <div className="row">
         {filteredProducts.length > 0 ? (
           filteredProducts.map(product => (
-            <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex" key={product._id}>
+            <div className="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex" key={product._id}>
               <div className="card w-100 shadow-sm border-0 border-bottom border-warning">
                 <img
                   src={product.image ? (product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`) : 'https://via.placeholder.com/300?text=No+Image'}

@@ -30,14 +30,14 @@ const Navbar = () => {
     <header className="fixed-top shadow-sm">
       {/* Top Tier */}
       <div className="navbar-premium py-2">
-        <div className="container d-flex flex-wrap justify-content-between align-items-center">
+        <div className="container d-flex justify-content-between align-items-center">
           {/* LOGO */}
           <Link to="/" className="navbar-brand font-weight-bold text-dark m-0 d-flex align-items-center" style={{ fontSize: '24px' }}>
             <span className="mr-2" style={{ fontSize: '28px' }}>🛍️</span> Shiwansh -Cart
           </Link>
 
           {/* SEARCH */}
-          <form className="form-inline mx-auto w-100 w-md-50 order-3 order-md-2 mt-3 mt-md-0" onSubmit={(e) => e.preventDefault()}>
+          <form className="form-inline mx-auto d-none d-md-flex w-50" onSubmit={(e) => e.preventDefault()}>
             <div className="input-group w-100">
               <input 
                 type="text" 
@@ -51,7 +51,7 @@ const Navbar = () => {
           </form>
 
           {/* CONTROLS */}
-          <div className="d-flex align-items-center gap-2 gap-md-3 order-2 order-md-3">
+          <div className="d-flex align-items-center gap-3">
             <Link to="/cart" className="position-relative text-dark text-decoration-none mx-3">
               <ShoppingCart size={24} />
               {cartCount > 0 && <span className="position-absolute badge badge-pill badge-danger" style={{ top: '-8px', right: '-12px' }}>{cartCount}</span>}
@@ -84,10 +84,10 @@ const Navbar = () => {
       </div>
 
       {/* Bottom Tier */}
-      <nav className="navbar navbar-expand-md navbar-light bg-white border-bottom py-1 py-md-2">
+      <nav className="navbar navbar-expand-md navbar-light bg-white border-bottom">
         <div className="container">
-          <button className="navbar-toggler w-100 border-0 bg-light d-flex justify-content-center align-items-center py-2" type="button" data-toggle="collapse" data-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon mr-2" style={{ transform: 'scale(0.8)' }}></span> <span className="small font-weight-bold text-muted">MENU</span>
+          <button className="navbar-toggler mx-auto" type="button" data-toggle="collapse" data-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
           </button>
 
           <div className="collapse navbar-collapse justify-content-center" id="mainNav">
