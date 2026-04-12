@@ -57,20 +57,20 @@ const ProductDetails = () => {
 
       <div className="row">
         {/* Product Image */}
-        <div className="col-md-6 mb-4">
+        <div className="col-12 col-lg-6 mb-4">
           <div className="card border-0 shadow-sm overflow-hidden" style={{ borderRadius: '1rem' }}>
             <img 
               src={product.image ? (product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`) : 'https://via.placeholder.com/300?text=No+Image'} 
               alt={product.name} 
               onError={(e) => e.target.src='/images/fallback.png'}
-              className="img-fluid" 
-              style={{ width: '100%', height: '500px', objectFit: 'cover' }}
+              className="img-fluid w-100" 
+              style={{ maxHeight: '500px', objectFit: 'cover' }}
             />
           </div>
         </div>
 
         {/* Product Info */}
-        <div className="col-md-6 pl-md-5">
+        <div className="col-12 col-lg-6 pl-lg-5">
           <div className="mb-4">
             <span className="badge badge-pill badge-light text-primary px-3 py-2 mb-2">{product.category}</span>
             <h1 className="font-weight-bold mb-2">{product.name}</h1>
@@ -91,9 +91,9 @@ const ProductDetails = () => {
             <p className="text-muted" style={{ lineHeight: '1.8' }}>{product.description}</p>
           </div>
 
-          <div className="card p-4 border-0 shadow-sm mb-4" style={{ backgroundColor: '#fdf8f0', borderRadius: '1rem' }}>
-            <div className="d-flex align-items-center mb-4">
-              <label className="font-weight-bold mr-3 mb-0">Quantity:</label>
+          <div className="card p-3 p-md-4 border-0 shadow-sm mb-4" style={{ backgroundColor: '#fdf8f0', borderRadius: '1rem' }}>
+            <div className="d-flex flex-wrap align-items-center mb-4">
+              <label className="font-weight-bold mr-3 mb-2 mb-sm-0 w-100 w-sm-auto">Quantity:</label>
               <div className="input-group" style={{ width: '130px' }}>
                 <div className="input-group-prepend">
                   <button 
