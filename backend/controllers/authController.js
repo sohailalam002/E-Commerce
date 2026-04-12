@@ -1,82 +1,80 @@
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
+import Role from '../models/roleModel.js';
 
 // Generate JWT Token
 const generateToken = (user) => {
   return jwt.sign(
-    { id: user._id, role: user.role, isAdmin: user.isAdmin }, 
-    process.env.JWT_SECRET, 
+    {
+      id: user._id,
+      role: user.role?.roleName, // ✅ FIXED
+      isAdmin: user.isAdmin,
+    },
+    process.env.JWT_SECRET,
     { expiresIn: '30d' }
   );
 };
 
-// @desc   Register a new user
-// @route  POST /api/auth/register
-// @access Public
+// REGISTER
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, isAdmin } = req.body;
+  const { name, email, password } = req.body;
 
-  // Check all fields
   if (!name || !email || !password) {
     res.status(400);
     throw new Error('Please fill all fields');
   }
 
-  // Check if user already exists
   const userExists = await User.findOne({ email });
+
   if (userExists) {
     res.status(400);
-    throw new Error('User already exists with this email');
+    throw new Error('User already exists');
   }
 
-  // Create user
-  const user = await User.create({ 
-    name, 
-    email, 
+  // DEFAULT ROLE = USER
+  const role = await Role.findOne({ roleName: 'user' });
+
+  if (!role) {
+    res.status(500);
+    throw new Error('Default role not found');
+  }
+
+  const user = await User.create({
+    name,
+    email,
     password,
-    role: req.body.role || 'user',
-    isAdmin: (req.body.role === 'admin' || req.body.role === 'superadmin')
+    role: role._id, // ✅ ObjectId FIX
+    isAdmin: false,
   });
 
   res.status(201).json({
     success: true,
-    message: 'User registered successfully',
     user: {
       _id: user._id,
       name: user.name,
       email: user.email,
-      role: user.role,
+      role: role.roleName, // frontend string
       isAdmin: user.isAdmin,
       token: generateToken(user),
     },
   });
 });
 
-// @desc   Login user & return JWT
-// @route  POST /api/auth/login
-// @access Public
+// LOGIN
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    res.status(400);
-    throw new Error('Please enter email and password');
-  }
+  const user = await User.findOne({ email }).populate('role');
 
-  // Find user by email and populate role
-  const user = await User.findOne({ email }).populate('role', 'roleName permissions');
-
-  // Check password using model method
   if (user && (await user.matchPassword(password))) {
     res.json({
       success: true,
-      message: 'Login successful',
       user: {
         _id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role,
+        role: user.role?.roleName, // ✅ FIXED
         isAdmin: user.isAdmin,
         token: generateToken(user),
       },
@@ -87,15 +85,25 @@ export const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc   Get logged in user profile
-// @route  GET /api/auth/profile
-// @access Private
+// PROFILE
 export const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id).select('-password').populate('role', 'roleName permissions');
-  if (user) {
-    res.json({ success: true, user });
-  } else {
+  const user = await User.findById(req.user._id)
+    .select('-password')
+    .populate('role');
+
+  if (!user) {
     res.status(404);
     throw new Error('User not found');
   }
+
+  res.json({
+    success: true,
+    user: {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role?.roleName,
+      isAdmin: user.isAdmin,
+    },
+  });
 });
