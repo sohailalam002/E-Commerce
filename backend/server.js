@@ -13,6 +13,8 @@ import contactRoutes from './routes/contactRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
+import roleRoutes from './routes/roleRoutes.js';
+import superAdminRoutes from './routes/superAdminRoutes.js';
 
 // Import error middleware
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
@@ -56,6 +58,8 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/roles', roleRoutes);
+app.use('/api/superadmin', superAdminRoutes);
 
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));

@@ -16,7 +16,8 @@ const SuperAdminRoute = ({ children }) => {
   }
 
   // If no user or user is not a superadmin, redirect to home
-  if (!user || user.role !== 'superadmin') {
+  const userRoleName = user.role?.roleName || user.role;
+  if (!user || userRoleName !== 'superadmin') {
     return <Navigate to="/" replace />;
   }
 

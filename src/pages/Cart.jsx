@@ -18,7 +18,7 @@ const Cart = () => {
     );
   }
 
-  const items = cart?.items || [];
+  const items = (cart?.items || []).filter(item => item.product);
   const totalPrice = cart?.totalPrice || 0;
 
   if (items.length === 0) {

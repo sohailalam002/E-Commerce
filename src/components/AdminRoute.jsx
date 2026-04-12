@@ -16,7 +16,8 @@ const AdminRoute = ({ children }) => {
   }
 
   // If no user or user is not an admin, redirect to home
-  if (!user || (user.role !== 'admin' && user.role !== 'superadmin')) {
+  const userRoleName = user.role?.roleName || user.role;
+  if (!user || (userRoleName !== 'admin' && userRoleName !== 'superadmin')) {
     console.log('AdminRoute: Access Denied. Redirecting to Home. User:', user);
     return <Navigate to="/" replace />;
   }

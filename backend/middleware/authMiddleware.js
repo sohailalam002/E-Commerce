@@ -11,7 +11,7 @@ export const protect = asyncHandler(async (req, res, next) => {
     try {
       token = req.headers.authorization.split(' ')[1]; // Get token part
       const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify it
-      req.user = await User.findById(decoded.id).select('-password'); // Attach user
+      req.user = await User.findById(decoded.id).select('-password').populate('role', 'roleName permissions'); // Attach user with roles
       next();
     } catch (error) {
       res.status(401);
@@ -28,7 +28,7 @@ export const protect = asyncHandler(async (req, res, next) => {
 // Admin-only route
 export const isAdmin = (req, res, next) => {
   console.log('isAdmin Middleware check for user:', req.user?.email, 'Role:', req.user?.role, 'isAdmin:', req.user?.isAdmin);
-  if (req.user && (req.user.isAdmin || req.user.role === 'admin' || req.user.role === 'superadmin')) {
+  if (req.user && (req.user.isAdmin || req.user.role?.roleName === 'admin' || req.user.role?.roleName === 'superadmin')) {
     next();
   } else {
     res.status(403);
@@ -37,7 +37,7 @@ export const isAdmin = (req, res, next) => {
 };
 // Super Admin-only route
 export const isSuperAdmin = (req, res, next) => {
-  if (req.user && req.user.role === 'superadmin') {
+  if (req.user && req.user.role?.roleName === 'superadmin') {
     next();
   } else {
     res.status(403);

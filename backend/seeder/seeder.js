@@ -28,13 +28,13 @@ const importData = async () => {
 
     // Insert users (passwords will be hashed by model hook)
     const createdUsers = await User.insertMany(sampleUsers);
-    console.log(`✅ ${createdUsers.length} users inserted`);
+    console.log(`${createdUsers.length} users inserted`);
 
     // Insert products
     const createdProducts = await Product.insertMany(sampleProducts);
-    console.log(`✅ ${createdProducts.length} products inserted`);
+    console.log(` ${createdProducts.length} products inserted`);
 
-    console.log('\n🎉 Data seeded successfully!');
+    console.log('\n Data seeded successfully!');
     console.log('-----------------------------');
     console.log('Admin Login:');
     console.log('  Email   : admin@shopsy.com');
@@ -43,7 +43,7 @@ const importData = async () => {
 
     process.exit();
   } catch (error) {
-    console.error(`❌ Seeder error: ${error.message}`);
+    console.error(` Seeder error: ${error.message}`);
     process.exit(1);
   }
 };
@@ -55,15 +55,15 @@ const destroyData = async () => {
     await Cart.deleteMany();
     await Product.deleteMany();
     await User.deleteMany();
-    console.log('💥 All data destroyed');
+    console.log(' All data destroyed');
     process.exit();
   } catch (error) {
-    console.error(`❌ Destroy error: ${error.message}`);
+    console.error(`Destroy error: ${error.message}`);
     process.exit(1);
   }
 };
 
-// Run based on flag: node seeder.js --destroy
+// Run based on flag node seeder.js destroy
 if (process.argv[2] === '--destroy') {
   destroyData();
 } else {

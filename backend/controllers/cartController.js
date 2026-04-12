@@ -15,6 +15,9 @@ export const getCart = asyncHandler(async (req, res) => {
     return res.json({ success: true, cart: { items: [], totalPrice: 0 } });
   }
 
+  // Filter out items where the product no longer exists
+  cart.items = cart.items.filter(item => item.product);
+
   const totalPrice = cart.items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0

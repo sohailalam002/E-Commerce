@@ -64,8 +64,8 @@ export const loginUser = asyncHandler(async (req, res) => {
     throw new Error('Please enter email and password');
   }
 
-  // Find user by email
-  const user = await User.findOne({ email });
+  // Find user by email and populate role
+  const user = await User.findOne({ email }).populate('role', 'roleName permissions');
 
   // Check password using model method
   if (user && (await user.matchPassword(password))) {
@@ -91,7 +91,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 // @route  GET /api/auth/profile
 // @access Private
 export const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id).select('-password');
+  const user = await User.findById(req.user._id).select('-password').populate('role', 'roleName permissions');
   if (user) {
     res.json({ success: true, user });
   } else {

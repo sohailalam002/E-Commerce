@@ -30,11 +30,11 @@ const Login = () => {
     setIsSubmitting(false);
 
     if (result.success) {
-      const userRole = result.user.role;
+      const userRoleName = result.user.role?.roleName || result.user.role;
       
-      if (userRole === 'superadmin') {
+      if (userRoleName === 'superadmin') {
         navigate('/superadmin-dashboard');
-      } else if (userRole === 'admin') {
+      } else if (userRoleName === 'admin') {
         navigate('/admin-dashboard');
       } else {
         navigate('/');

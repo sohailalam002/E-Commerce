@@ -56,10 +56,10 @@ const Navbar = () => {
                   {user.name}
                 </button>
                 <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                  {user.role === 'admin' && (
+                  {user.role?.roleName === 'admin' && (
                     <Link className="dropdown-item" to="/admin-dashboard">Admin Dashboard</Link>
                   )}
-                  {user.role === 'superadmin' && (
+                  {user.role?.roleName === 'superadmin' && (
                     <Link className="dropdown-item text-primary font-weight-bold" to="/superadmin-dashboard">Super Admin Dashboard</Link>
                   )}
                   <div className="dropdown-divider"></div>
