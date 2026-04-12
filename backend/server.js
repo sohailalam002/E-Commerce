@@ -44,7 +44,11 @@ app.use((req, res, next) => {
 // Enable CORS so React frontend can talk to this server
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'], // Vite dev servers
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'https://e-commerce-mcou.vercel.app' // ✅ ADD THIS
+    ],
     credentials: true,
   })
 );
