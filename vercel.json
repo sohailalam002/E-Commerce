@@ -3,6 +3,10 @@
     {
       "source": "/api/(.*)",
       "destination": "https://e-commerce-f7kv.onrender.com/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
