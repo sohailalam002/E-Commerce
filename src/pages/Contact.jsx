@@ -90,7 +90,7 @@ const Contact = () => {
                   <input
                     type="text"
                     className="form-control bg-light"
-                    placeholder="Jane"
+                    placeholder="first name"
                     name="firstName"
                     value={firstName}
                     onChange={handleChange}
@@ -102,7 +102,7 @@ const Contact = () => {
                   <input
                     type="text"
                     className="form-control bg-light"
-                    placeholder="Doe"
+                    placeholder="last name"
                     name="lastName"
                     value={lastName}
                     onChange={handleChange}
@@ -116,7 +116,7 @@ const Contact = () => {
                 <input
                   type="email"
                   className="form-control bg-light"
-                  placeholder="jane@example.com"
+                  placeholder="enter your email"
                   name="email"
                   value={email}
                   onChange={handleChange}
