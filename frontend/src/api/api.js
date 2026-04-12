@@ -1,14 +1,17 @@
 import axios from 'axios';
 
-// Create an Axios instance with a base URL
+// Use environment variable
+const API = import.meta.env.VITE_API_URL;
+
+// Create Axios instance
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: `${API}/api`,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Add a request interceptor to add the JWT token to headers
+// Request interceptor (JWT)
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('shopsy_token');
@@ -17,12 +20,10 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Add a response interceptor to handle errors globally
+// Response interceptor (Error handling)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
