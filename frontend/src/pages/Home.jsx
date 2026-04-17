@@ -37,7 +37,7 @@ const Home = () => {
 
       {/* Hero Banner Area */}
       <div className="jumbotron bg-light text-center rounded shadow-sm border p-5 mb-5">
-        <h1 className="display-4 font-weight-bold mb-3">Welcome to Shiwansh -Cart</h1>
+        <h1 className="display-4 font-weight-bold mb-3">Welcome to Cartify </h1>
         <p className="lead mb-4">Discover the best products at unbeatable prices.</p>
         {!categoryFilter && (
           <Link to="/" className="btn btn-warning btn-lg rounded-pill px-5 shadow-sm font-weight-bold">Shop Now</Link>

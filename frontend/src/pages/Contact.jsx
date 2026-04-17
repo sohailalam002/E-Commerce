@@ -76,7 +76,7 @@ const Contact = () => {
             </div>
             <div className="d-flex align-items-center mb-4 pl-3 text-left">
               <Mail className="mr-3" />
-              <span>support@Shiwanshpremium.com</span>
+              <span>support@Cartifypremium.com</span>
             </div>
           </div>
         </div>

@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="row text-center text-md-left">
 
           <div className="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-            <h5 className="text-uppercase mb-4 font-weight-bold text-warning">Shiwansh   Solutions</h5>
+            <h5 className="text-uppercase mb-4 font-weight-bold text-warning">Cartify</h5>
             <p>Your one-stop shop for all your premium needs. Quality guaranteed. Secure payments.</p>
           </div>
 
@@ -29,7 +29,7 @@ const Footer = () => {
           <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
             <h5 className="text-uppercase mb-4 font-weight-bold text-warning">Contact</h5>
             <p><i className="fas fa-home mr-3"></i> India-Bihar(841226)</p>
-            <p><i className="fas fa-envelope mr-3"></i> info@Shiwanssolutions.com</p>
+            <p><i className="fas fa-envelope mr-3"></i> info@Cartify.com</p>
             <p><i className="fas fa-phone mr-3"></i> + 01 234 567 88</p>
           </div>
 
@@ -40,7 +40,7 @@ const Footer = () => {
         <div className="row align-items-center">
           <div className="col-12 text-center">
             <p className="mb-0"> Copyright ©2026 All rights reserved by:
-              <strong className="text-warning">Shiwansh Solutions</strong>
+              <strong className="text-warning">Cartify</strong>
             </p>
           </div>
         </div>

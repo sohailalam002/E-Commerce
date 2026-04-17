@@ -33,7 +33,7 @@ const Navbar = () => {
         <div className="container d-flex justify-content-between align-items-center">
           {/* LOGO */}
           <Link to="/" className="navbar-brand font-weight-bold text-dark m-0 d-flex align-items-center" style={{ fontSize: '24px' }}>
-            <span className="mr-2" style={{ fontSize: '28px' }}>🛍️</span> Shiwansh -Cart
+            <span className="mr-2" style={{ fontSize: '28px' }}>🛍️</span> Cartify
           </Link>
 
           {/* SEARCH */}
