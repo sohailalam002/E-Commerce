@@ -6,6 +6,7 @@ console.log("API URL:", import.meta.env.VITE_API_URL);
 // Create Axios instance
 const api = axios.create({
   baseURL: `${API}/api`,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
