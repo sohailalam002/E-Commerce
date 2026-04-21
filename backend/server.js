@@ -3,8 +3,13 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 
+import mongoose from "mongoose";
+
 // Load env FIRST
 dotenv.config();
+
+// Mongoose Configuration
+mongoose.set('bufferCommands', false);
 
 // Connect DB
 connectDB();
@@ -29,10 +34,26 @@ const app = express();
 app.use(express.json());
 
 // CORS
+const allowedOrigins = [
+  "https://e-commerce-mcou.vercel.app",
+  "http://localhost:3000",
+  "http://localhost:5173",
+];
+
 app.use(
   cors({
-    origin: true,
+    origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
 
