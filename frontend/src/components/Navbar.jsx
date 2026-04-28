@@ -1,5 +1,5 @@
-import React from 'react';
-import { ShoppingCart, LayoutDashboard } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShoppingCart, Menu, X, User, LogOut, ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
@@ -10,11 +10,12 @@ const Navbar = () => {
   const { user, logout } = useAuth();
   const { cartCount } = useCart();
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = (e) => {
     if (e) e.preventDefault();
-    // Use the logout function from AuthContext which handles redirect
     logout(navigate);
+    setIsMenuOpen(false);
   };
 
   const handleCategorySelect = (e, category) => {
@@ -24,93 +25,131 @@ const Navbar = () => {
     } else {
       navigate(`/?category=${encodeURIComponent(category)}`);
     }
+    setIsMenuOpen(false);
   };
 
   return (
-    <header className="fixed-top shadow-sm">
-      {/* Top Tier */}
-      <div className="navbar-premium py-2">
-        <div className="container d-flex justify-content-between align-items-center">
-          {/* LOGO */}
-          <Link to="/" className="navbar-brand font-weight-bold text-dark m-0 d-flex align-items-center" style={{ fontSize: '24px' }}>
-            <span className="mr-2" style={{ fontSize: '28px' }}>🛍️</span> Cartify
+    <header className="navbar-premium">
+      <div className="container flex justify-between items-center h-100" style={{ height: '100%' }}>
+        {/* LOGO */}
+        <Link to="/" className="flex items-center" style={{ textDecoration: 'none', color: 'var(--text-dark)', gap: '10px' }}>
+          <span style={{ fontSize: '28px' }}>🛍️</span>
+          <span style={{ fontSize: '24px', fontWeight: 'bold' }}>Cartify</span>
+        </Link>
+
+        {/* DESKTOP SEARCH */}
+        <div className="d-none d-md-block" style={{ flex: '1', maxWidth: '500px', margin: '0 40px' }}>
+          <input 
+            type="text" 
+            className="form-control" 
+            placeholder="Search products..." 
+            style={{ borderRadius: '50px', border: 'none', padding: '10px 20px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }} 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        {/* CONTROLS */}
+        <div className="flex items-center" style={{ gap: '20px' }}>
+          <Link to="/cart" style={{ position: 'relative', color: 'var(--text-dark)', display: 'flex', alignItems: 'center' }}>
+            <ShoppingCart size={24} />
+            {cartCount > 0 && (
+              <span style={{ 
+                position: 'absolute', top: '-8px', right: '-12px', 
+                background: 'red', color: 'white', borderRadius: '50%', 
+                width: '20px', height: '20px', fontSize: '12px', 
+                display: 'flex', alignItems: 'center', justifyContent: 'center' 
+              }}>
+                {cartCount}
+              </span>
+            )}
           </Link>
 
-          {/* SEARCH */}
-          <form className="form-inline mx-auto d-none d-md-flex w-50" onSubmit={(e) => e.preventDefault()}>
-            <div className="input-group w-100">
-              <input 
-                type="text" 
-                className="form-control rounded-pill border-0 shadow-sm px-4" 
-                placeholder="search" 
-                style={{ height: '38px', fontSize: '14px' }} 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </form>
-
-          {/* CONTROLS */}
-          <div className="d-flex align-items-center gap-3">
-            <Link to="/cart" className="position-relative text-dark text-decoration-none mx-3">
-              <ShoppingCart size={24} />
-              {cartCount > 0 && <span className="position-absolute badge badge-pill badge-danger" style={{ top: '-8px', right: '-12px' }}>{cartCount}</span>}
-            </Link>
-
+          {/* Desktop Auth */}
+          <div className="d-none d-md-flex items-center" style={{ gap: '15px' }}>
             {user ? (
               <div className="dropdown">
-                <button className="btn btn-light btn-sm dropdown-toggle rounded-pill px-3 shadow-sm border font-weight-bold" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style={{ height: '36px', minWidth: '100px' }}>
-                  {user.name}
+                <button className="btn-custom btn-outline-custom" style={{ padding: '8px 20px', minHeight: '40px' }} data-toggle="dropdown">
+                  {user.name} <ChevronDown size={16} />
                 </button>
-                <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                  {user.role?.roleName === 'admin' && (
-                    <Link className="dropdown-item" to="/admin-dashboard">Admin Dashboard</Link>
-                  )}
-                  {user.role?.roleName === 'superadmin' && (
-                    <Link className="dropdown-item text-primary font-weight-bold" to="/superadmin-dashboard">Super Admin Dashboard</Link>
-                  )}
+                <div className="dropdown-menu dropdown-menu-right">
+                  {user.role?.roleName === 'admin' && <Link className="dropdown-item" to="/admin-dashboard">Admin Dashboard</Link>}
+                  {user.role?.roleName === 'superadmin' && <Link className="dropdown-item" to="/superadmin-dashboard text-primary">Super Admin</Link>}
                   <div className="dropdown-divider"></div>
-                  <button type="button" className="dropdown-item text-danger" style={{ cursor: 'pointer' }} onClick={handleLogout}>Logout</button>
+                  <button onClick={handleLogout} className="dropdown-item text-danger">Logout</button>
                 </div>
               </div>
             ) : (
-              <div className="d-flex">
-                <Link to="/login" className="btn btn-outline-dark btn-sm rounded-pill px-4 mx-2 font-weight-bold">Login</Link>
-                <Link to="/register" className="btn btn-dark btn-sm rounded-pill px-4 font-weight-bold">Register</Link>
-              </div>
+              <>
+                <Link to="/login" className="nav-link" style={{ fontWeight: '600' }}>Login</Link>
+                <Link to="/register" className="btn-custom btn-primary-custom" style={{ padding: '8px 24px', minHeight: '40px' }}>Register</Link>
+              </>
             )}
           </div>
+
+          {/* MOBILE HAMBURGER */}
+          <button 
+            className="d-md-none" 
+            onClick={() => setIsMenuOpen(true)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '10px' }}
+          >
+            <Menu size={28} />
+          </button>
         </div>
       </div>
 
-      {/* Bottom Tier */}
-      <nav className="navbar navbar-expand-md navbar-light bg-white border-bottom">
-        <div className="container">
-          <button className="navbar-toggler mx-auto" type="button" data-toggle="collapse" data-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
+      {/* MOBILE MENU */}
+      <div className={`menu-overlay ${isMenuOpen ? 'show' : ''}`} onClick={() => setIsMenuOpen(false)}></div>
+      <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="m-0">Menu</h3>
+          <button onClick={() => setIsMenuOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+            <X size={28} />
           </button>
-
-          <div className="collapse navbar-collapse justify-content-center" id="mainNav">
-            <ul className="navbar-nav align-items-center">
-              <li className="nav-item mx-3"><Link className="nav-link text-dark font-weight-bold" style={{ fontSize: '14px' }} to="/">Home</Link></li>
-              <li className="nav-item mx-3"><Link className="nav-link text-dark font-weight-bold" style={{ fontSize: '14px' }} to="/about">About</Link></li>
-              <li className="nav-item mx-3"><Link className="nav-link text-dark font-weight-bold" style={{ fontSize: '14px' }} to="/services">Services</Link></li>
-              <li className="nav-item mx-3"><Link className="nav-link text-dark font-weight-bold" style={{ fontSize: '14px' }} to="/contact">Contact</Link></li>
-              <li className="nav-item mx-3 dropdown">
-                <a className="nav-link dropdown-toggle text-dark font-weight-bold" style={{ fontSize: '14px' }} href="#" id="categoriesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Categories
-                </a>
-                <div className="dropdown-menu shadow-sm border-0" aria-labelledby="categoriesDropdown">
-                  <a className="dropdown-item" href="#" onClick={(e) => handleCategorySelect(e, 'all')}>All Products</a>
-                  {categories.filter(c => c !== 'all').map((cat) => (
-                    <a className="dropdown-item text-capitalize" href="#" key={cat} onClick={(e) => handleCategorySelect(e, cat)}>{cat}</a>
-                  ))}
-                </div>
-              </li>
-            </ul>
-          </div>
         </div>
-      </nav>
+
+        {/* Mobile Search */}
+        <div className="mb-4">
+          <input 
+            type="text" 
+            className="form-control" 
+            placeholder="Search..." 
+            style={{ borderRadius: '8px' }} 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        <nav className="flex flex-column" style={{ gap: '10px' }}>
+          <Link to="/" className="nav-link" onClick={() => setIsMenuOpen(false)}>Home</Link>
+          <Link to="/about" className="nav-link" onClick={() => setIsMenuOpen(false)}>About</Link>
+          <Link to="/services" className="nav-link" onClick={() => setIsMenuOpen(false)}>Services</Link>
+          <Link to="/contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>Contact</Link>
+          
+          <hr />
+          <p className="font-weight-bold mb-2">Categories</p>
+          <a href="#" className="nav-link" onClick={(e) => handleCategorySelect(e, 'all')}>All Products</a>
+          {categories.filter(c => c !== 'all').map((cat) => (
+            <a href="#" className="nav-link text-capitalize" key={cat} onClick={(e) => handleCategorySelect(e, cat)}>
+              {cat}
+            </a>
+          ))}
+
+          <hr />
+          {user ? (
+            <>
+              <p className="font-weight-bold mb-2">Account: {user.name}</p>
+              {user.role?.roleName === 'admin' && <Link to="/admin-dashboard" className="nav-link" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>}
+              <button onClick={handleLogout} className="nav-link text-danger border-0 bg-transparent w-100 text-left">Logout</button>
+            </>
+          ) : (
+            <div className="flex flex-column" style={{ gap: '10px', marginTop: '10px' }}>
+              <Link to="/login" className="btn-custom btn-outline-custom w-100" onClick={() => setIsMenuOpen(false)}>Login</Link>
+              <Link to="/register" className="btn-custom btn-primary-custom w-100" onClick={() => setIsMenuOpen(false)}>Register</Link>
+            </div>
+          )}
+        </nav>
+      </div>
     </header>
   );
 };

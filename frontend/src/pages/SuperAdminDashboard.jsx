@@ -16,6 +16,7 @@ import {
   LayoutGrid,
   Plus,
   X,
+  Menu,
   ShieldQuestion,
   Key
 } from 'lucide-react';
@@ -28,6 +29,7 @@ const SuperAdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('users');
   const [roles, setRoles] = useState([]);
   const [selectedRoles, setSelectedRoles] = useState({});
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // CRUD States for Modals
   const [showRoleModal, setShowRoleModal] = useState(false);
@@ -306,19 +308,31 @@ const SuperAdminDashboard = () => {
 
   return (
     <div className="container-fluid p-0 min-vh-100 bg-light mt-5">
-      <div className="d-flex">
+      <div className="d-flex flex-column flex-lg-row">
+        {/* MOBILE SIDEBAR TOGGLE */}
+        <div className="d-lg-none bg-dark text-white p-3 d-flex justify-content-between align-items-center sticky-top" style={{ top: '70px', zIndex: 900 }}>
+          <div className="d-flex align-items-center">
+            <ShieldAlert className="text-primary mr-2" size={24} />
+            <h6 className="mb-0 font-weight-bold">Super Admin</h6>
+          </div>
+          <button className="btn btn-primary btn-sm" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+            {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+
         {/* SIDEBAR */}
-        <div className="bg-dark text-white p-4 min-vh-100 position-fixed shadow-lg" style={{ width: '260px', zIndex: 1000 }}>
-          <div className="mb-5 text-center mt-3">
+        <div className={`admin-sidebar bg-dark text-white p-4 shadow-lg transition-all ${isSidebarOpen ? 'd-block' : 'd-none d-lg-block'}`} 
+             style={{ minWidth: '260px', zIndex: 950 }}>
+          <div className="mb-5 text-center mt-3 d-none d-lg-block">
             <ShieldAlert className="text-primary mb-2" size={40} />
             <h5 className="font-weight-bold">Super Admin</h5>
             <div className="small text-muted border-top border-secondary pt-2 mt-2">Management Panel</div>
           </div>
           
-          <ul className="nav flex-column">
-            <li className="nav-item mb-3">
+          <ul className="nav flex-column mt-3 mt-lg-0">
+            <li className="nav-item mb-2 mb-lg-3">
               <button 
-                onClick={() => setActiveTab('users')}
+                onClick={() => { setActiveTab('users'); setIsSidebarOpen(false); }}
                 className={`btn btn-block text-left d-flex align-items-center transition-all px-3 py-2 rounded-lg border-0 ${
                   activeTab === 'users' ? 'btn-primary shadow text-white' : 'text-light'
                 }`}
@@ -328,9 +342,9 @@ const SuperAdminDashboard = () => {
               </button>
             </li>
             
-            <li className="nav-item mb-3">
+            <li className="nav-item mb-2 mb-lg-3">
               <button 
-                onClick={() => setActiveTab('roles')}
+                onClick={() => { setActiveTab('roles'); setIsSidebarOpen(false); }}
                 className={`btn btn-block text-left d-flex align-items-center transition-all px-3 py-2 rounded-lg border-0 ${
                   activeTab === 'roles' ? 'btn-primary shadow text-white' : 'text-light'
                 }`}
@@ -342,7 +356,7 @@ const SuperAdminDashboard = () => {
 
             <li className="nav-item">
               <button 
-                onClick={() => setActiveTab('assign-roles')}
+                onClick={() => { setActiveTab('assign-roles'); setIsSidebarOpen(false); }}
                 className={`btn btn-block text-left d-flex align-items-center transition-all px-3 py-2 rounded-lg border-0 ${
                   activeTab === 'assign-roles' ? 'btn-primary shadow text-white' : 'text-light'
                 }`}
@@ -355,7 +369,7 @@ const SuperAdminDashboard = () => {
         </div>
 
         {/* MAIN CONTENT AREA */}
-        <div className="flex-grow-1 p-5" style={{ marginLeft: '260px' }}>
+        <div className="flex-grow-1 p-3 p-lg-5 admin-content">
           <div className="container-fluid">
             {activeTab === 'users' && (
               <>
@@ -409,27 +423,29 @@ const SuperAdminDashboard = () => {
                                       {user.role?.roleName || 'No Role'}
                                     </span>
                                   </td>
-                                  <td className="text-right px-4 py-3 text-nowrap">
-                                    {user.role?.roleName !== 'superadmin' ? (
-                                      <>
-                                        <button 
-                                          className="btn btn-sm btn-outline-info mr-2 px-3 rounded-pill d-inline-flex align-items-center"
-                                          disabled={processingId === user._id}
-                                          onClick={() => handleEditClick(user)}
-                                        >
-                                          <ShieldCheck size={14} className="mr-1" /> Edit
-                                        </button>
-                                        <button 
-                                          className="btn btn-sm btn-outline-danger px-3 rounded-pill d-inline-flex align-items-center"
-                                          disabled={processingId === user._id}
-                                          onClick={() => deleteUser(user._id)}
-                                        >
-                                          <Trash2 size={14} className="mr-1" /> Delete
-                                        </button>
-                                      </>
-                                    ) : (
-                                      <span className="text-muted small italic">System Protected</span>
-                                    )}
+                                  <td className="text-right px-4 py-3">
+                                    <div className="d-flex justify-content-end align-items-center" style={{ gap: '8px' }}>
+                                      {user.role?.roleName !== 'superadmin' ? (
+                                        <>
+                                          <button 
+                                            className="btn btn-sm btn-outline-info rounded-pill px-3 d-flex align-items-center transition-all"
+                                            disabled={processingId === user._id}
+                                            onClick={() => handleEditClick(user)}
+                                          >
+                                            <ShieldCheck size={14} className="mr-1" /> Edit
+                                          </button>
+                                          <button 
+                                            className="btn btn-sm btn-outline-danger rounded-pill px-3 d-flex align-items-center transition-all"
+                                            disabled={processingId === user._id}
+                                            onClick={() => deleteUser(user._id)}
+                                          >
+                                            <Trash2 size={14} className="mr-1" /> Delete
+                                          </button>
+                                        </>
+                                      ) : (
+                                        <span className="badge badge-light text-muted px-3 py-2 rounded-pill border">System Protected</span>
+                                      )}
+                                    </div>
                                   </td>
                                 </tr>
                               ))}
@@ -485,20 +501,22 @@ const SuperAdminDashboard = () => {
                               )) || <span className="text-muted italic">No permissions</span>}
                             </td>
                             <td className="text-right px-4 py-3">
-                              <button 
-                                className="btn btn-sm btn-outline-info mr-2 px-3 rounded-pill"
-                                disabled={role.roleName === 'superadmin' || processingId === role._id}
-                                onClick={() => handleEditRoleClick(role)}
-                              >
-                                Edit
-                              </button>
-                              <button 
-                                className="btn btn-sm btn-outline-danger px-3 rounded-pill"
-                                disabled={role.roleName === 'superadmin' || processingId === role._id}
-                                onClick={() => handleDeleteRole(role._id)}
-                              >
-                                <Trash2 size={14} className="mr-1" /> Delete
-                              </button>
+                              <div className="d-flex justify-content-end align-items-center" style={{ gap: '8px' }}>
+                                <button 
+                                  className="btn btn-sm btn-outline-info rounded-pill px-3 d-flex align-items-center transition-all"
+                                  disabled={role.roleName === 'superadmin' || processingId === role._id}
+                                  onClick={() => handleEditRoleClick(role)}
+                                >
+                                  Edit
+                                </button>
+                                <button 
+                                  className="btn btn-sm btn-outline-danger rounded-pill px-3 d-flex align-items-center transition-all"
+                                  disabled={role.roleName === 'superadmin' || processingId === role._id}
+                                  onClick={() => handleDeleteRole(role._id)}
+                                >
+                                  <Trash2 size={14} className="mr-1" /> Delete
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))}

@@ -205,30 +205,34 @@ const AdminDashboard = () => {
         {/* Tab Navigation */}
         <div className="row mb-4">
           <div className="col-12">
-            <div className="nav nav-pills nav-justified bg-white p-2 shadow-sm rounded-lg" style={{ borderRadius: '15px' }}>
+            <div className="d-flex flex-wrap bg-white p-1 p-lg-2 shadow-sm rounded-lg" style={{ borderRadius: '15px', gap: '5px' }}>
               <button
-                className={`nav-link border-0 py-3 ${activeTab === 'stats' ? 'active bg-primary' : 'text-dark'}`}
+                className={`btn flex-fill py-3 px-2 ${activeTab === 'stats' ? 'btn-primary' : 'btn-light'}`}
+                style={{ borderRadius: '12px', minWidth: '100px', fontSize: '14px' }}
                 onClick={() => setActiveTab('stats')}
               >
-                <LayoutDashboard className="mr-2 icon-inline" size={20} /> Status
+                <LayoutDashboard className="d-block d-md-inline-block mb-1 mb-md-0 mr-md-2" size={18} /> Stats
               </button>
               <button
-                className={`nav-link border-0 py-3 ${activeTab === 'products' ? 'active bg-primary' : 'text-dark'}`}
+                className={`btn flex-fill py-3 px-2 ${activeTab === 'products' ? 'btn-primary' : 'btn-light'}`}
+                style={{ borderRadius: '12px', minWidth: '100px', fontSize: '14px' }}
                 onClick={() => setActiveTab('products')}
               >
-                <Package className="mr-2 icon-inline" size={20} /> Products
+                <Package className="d-block d-md-inline-block mb-1 mb-md-0 mr-md-2" size={18} /> Products
               </button>
               <button
-                className={`nav-link border-0 py-3 ${activeTab === 'orders' ? 'active bg-primary' : 'text-dark'}`}
+                className={`btn flex-fill py-3 px-2 ${activeTab === 'orders' ? 'btn-primary' : 'btn-light'}`}
+                style={{ borderRadius: '12px', minWidth: '100px', fontSize: '14px' }}
                 onClick={() => setActiveTab('orders')}
               >
-                <ShoppingCart className="mr-2 icon-inline" size={20} /> Orders
+                <ShoppingCart className="d-block d-md-inline-block mb-1 mb-md-0 mr-md-2" size={18} /> Orders
               </button>
               <button
-                className={`nav-link border-0 py-3 ${activeTab === 'messages' ? 'active bg-primary' : 'text-dark'}`}
+                className={`btn flex-fill py-3 px-2 ${activeTab === 'messages' ? 'btn-primary' : 'btn-light'}`}
+                style={{ borderRadius: '12px', minWidth: '100px', fontSize: '14px' }}
                 onClick={() => setActiveTab('messages')}
               >
-                <MessageSquare className="mr-2 icon-inline" size={20} /> Messages
+                <MessageSquare className="d-block d-md-inline-block mb-1 mb-md-0 mr-md-2" size={18} /> Messages
               </button>
             </div>
           </div>

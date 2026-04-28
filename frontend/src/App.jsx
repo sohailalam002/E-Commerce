@@ -30,7 +30,7 @@ function App() {
       <ToastContainer position="top-right" autoClose={3000} />
       <Navbar />
       
-      <main className="flex-fill d-flex flex-column" style={{paddingTop: '110px'}}>
+      <main className="flex-fill d-flex flex-column">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
