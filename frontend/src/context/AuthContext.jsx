@@ -1,13 +1,21 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import api from '../api/api';
+import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api, { AUTH_EXPIRED_EVENT, clearAuthStorage } from '../api/api';
 import { toast } from 'react-toastify';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const clearSession = useCallback(() => {
+    clearAuthStorage();
+    setUser(null);
+    setToken(null);
+  }, []);
 
   // Check if user is logged in on mount
   useEffect(() => {
@@ -26,17 +34,27 @@ export const AuthProvider = ({ children }) => {
           localStorage.setItem('userInfo', JSON.stringify(data.user));
         } catch (error) {
           console.error('AuthContext: Session expired or invalid:', error);
-          // Auto-logout on failure
-          localStorage.removeItem('shopsy_token');
-          localStorage.removeItem('userInfo');
-          setUser(null);
-          setToken(null);
+          clearSession();
         }
       }
       setLoading(false);
     };
     checkLoggedIn();
-  }, []);
+  }, [clearSession]);
+
+  useEffect(() => {
+    const handleAuthExpired = () => {
+      clearSession();
+      toast.error('Session expired. Please login again.');
+      navigate('/login', { replace: true });
+    };
+
+    window.addEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
+
+    return () => {
+      window.removeEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
+    };
+  }, [clearSession, navigate]);
 
   // Login function
   const login = async (email, password) => {
@@ -75,20 +93,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Logout function
-  const logout = (navigate) => {
-    // 1. Clear Local Storage
-    localStorage.removeItem('shopsy_token');
-    localStorage.removeItem('userInfo');
-    
-    // 2. Clear Context State
-    setUser(null);
-    setToken(null);
+  const logout = (redirect) => {
+    clearSession();
     
     toast.info('Logged out successfully');
     
-    // 3. Redirect to Login
-    if (navigate) {
-      navigate('/login');
+    if (redirect) {
+      redirect('/login');
     }
   };
 
